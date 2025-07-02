@@ -1,6 +1,6 @@
 {
   "name": "api-integracao",
-  "version": "0.2.0",
+  "version": "0.1.0",
   "description": "API P2",
   "main": "src/index.js",
   "scripts": {
