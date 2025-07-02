@@ -1,0 +1,230 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API P2 - Integração e Entrega Contínua",
+    "version": "1.0.0",
+    "description": "API REST com CRUD de usuários, integração com BetterStack e documentação Swagger"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de desenvolvimento"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Informações da API",
+        "description": "Retorna informações sobre a API e endpoints disponíveis",
+        "responses": {
+          "200": {
+            "description": "Informações da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "version": { "type": "string" },
+                    "environment": { "type": "string" },
+                    "endpoints": { "type": "object" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/produtos": {
+      "get": {
+        "summary": "Listar produtos",
+        "description": "Retorna todos os produtos cadastrados",
+        "responses": {
+          "200": {
+            "description": "Lista de produtos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Produto" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      },
+      "post": {
+        "summary": "Criar produto",
+        "description": "Cria um novo produto",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string", "description": "Nome do produto" },
+                  "descricao": { "type": "string", "description": "Descrição do produto" },
+                  "preco": { "type": "number", "format": "float", "description": "Preço do produto" }
+                },
+                "required": ["nome", "preco"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Produto criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "produto": { "$ref": "#/components/schemas/Produto" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Dados inválidos" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/produtos/{id}": {
+      "get": {
+        "summary": "Buscar produto por ID",
+        "description": "Retorna um produto específico pelo ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do produto" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto encontrado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Produto" }
+              }
+            }
+          },
+          "404": { "description": "Produto não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      },
+      "put": {
+        "summary": "Atualizar produto",
+        "description": "Atualiza um produto existente",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do produto" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string", "description": "Nome do produto" },
+                  "descricao": { "type": "string", "description": "Descrição do produto" },
+                  "preco": { "type": "number", "format": "float", "description": "Preço do produto" }
+                },
+                "required": ["nome", "preco"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Produto atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "produto": { "$ref": "#/components/schemas/Produto" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Dados inválidos" },
+          "404": { "description": "Produto não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      },
+      "delete": {
+        "summary": "Deletar produto",
+        "description": "Remove um produto pelo ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" }, "description": "ID do produto" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Produto excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "produto": { "$ref": "#/components/schemas/Produto" }
+                  }
+                }
+              }
+            }
+          },
+          "404": { "description": "Produto não encontrado" },
+          "500": { "description": "Erro interno do servidor" }
+        }
+      }
+    },
+    "/test-log": {
+      "get": {
+        "summary": "Teste de logs",
+        "description": "Endpoint para testar a integração com BetterStack",
+        "responses": {
+          "200": {
+            "description": "Log de teste enviado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "timestamp": { "type": "string", "format": "date-time" },
+                    "environment": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Produto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "preco": { "type": "number", "format": "float" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": { "type": "string" }
+        }
+      }
+    }
+  }
+}
